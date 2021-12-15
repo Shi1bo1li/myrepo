@@ -7,3 +7,14 @@ navbar:
       href: index.html
     - text: "About"
       href: about.html
+    - text: "New_page"
+      href: New_page.html
+    - text: "Another Page"
+      href: Page1.html
+      menu: 
+      - text: "Task 1"
+        href: reading1.html
+      - text: "Task 2"
+        href: reading2.html
+        
+  
