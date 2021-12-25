@@ -2,7 +2,9 @@
 title: "About This Website"
 output: 
   html_document:
-    css: style.css
+    toc: true
+    toc_float: true
+    code_folding: hide
 ---
 ## Load in packages 
 
@@ -14,11 +16,13 @@ output:
 ## Exploratory Analysis 
 ```{r}
 # Summary 
+summary(cars)
 ```
 
 ## Classification Model 
 ```{r}
 # Models 
+plot(pressure)
 ```
 
 ## Results 
