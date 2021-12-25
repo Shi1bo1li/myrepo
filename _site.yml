@@ -1,24 +1,35 @@
-name: "Shibo Li"
 output: 
   html_document: 
     theme: yeti
 output_dir: docs
 navbar:
+  title: "Shibo Li"
   left:
     - text: "Home"
       href: index.html
+      icon: fa-home
     - text: "Projects"
-      href: about.html
+      icon: fa-tasks
+      menu:
+      - text: "Forecastings"
+      - text: "First Project"
+        href: about.html
+      - text: "Second Project"
+        href: Project1.html
     - text: "Life"
+      icon: fa-laugh
       href: New_page.html
       menu: 
-      - text: "Task 1"
+      - text: "Drone Shots"
         href: reading1.html
       - text: "Task 2"
         href: reading2.html
   right:
-    - text: "LinkedIn"
-      href: "https://www.linkedin.com/in/shibo-li/"
+    - icon: fa-registered
+    - icon: fa-link
+      href: "http://www.linkedin.com/in/shibo-li"
+      
+
 
 
 

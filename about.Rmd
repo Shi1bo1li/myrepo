@@ -1,38 +1,107 @@
 ---
-title: "About This Website"
+title: "**Forecasting U.S. Alcoholic Beverages Sales**"
 output: 
   html_document:
     toc: true
     toc_float: true
     code_folding: hide
 ---
-## Welcome to my profile
 
-### 1.1 Here is the agenda
+## 1. Agenda
+* Holt-Winters’
+  + Additive 
+  + Multiplicative 
+* ETS(M, Ad, M) 
+* Final Model 
+  + Model Comparison 
+    - Evaluation Metrics
+  + Selection
+  + Results 
+
+```{r setup, include=FALSE}
+# Prepare needed packages
+packages <- c("psych", "tidyr", "ggplot2",
+              "caret", "dplyr", "car", "fpp",
+              "forecast","ResourceSelection",
+              "ggpubr", "scales", "stringr",
+              "gridExtra", "pROC", "reshape2", 
+              "corrplot","glmnet", "plyr",
+              "knitr", "purrr", "readxl", "seasonal", 
+              "fpp2")
+for (i in 1:length(packages)) {
+  if (!packages[i] %in% rownames(installed.packages())) {
+    install.packages(packages[i])
+  }
+  library(packages[i], character.only = TRUE) # Loads package in
+}
+# Remove unused objects
+rm(packages)
+rm(i)
+```
+
+## 2. Preliminary 
 ```{r}
-#Load in packages 
+#Load in data 
+Data = read.csv("Alcohol_Sales_Project.csv", stringsAsFactors = FALSE)
+
+wine.ts <- ts(Data$S4248SM144NCEN, start = c(1992, 1), frequency = 12) 
+autoplot(wine.ts)+ ggtitle("U.S. Alcoholic Beverages Sales")+xlab("Year") +
+  ylab("millions of dollars")+theme(plot.title = element_text(hjust = 0.5,face = "bold"))
 
 ```
 
-## Exploratory Analysis 
+I used alcoholic beverages sales in the U.S. from 1992 to 2019. By plotting the data, we can clearly see that there is seasonality with a frequency of five years. Therefore, I chose to used Holt-Winters’s additive, multiplicative because they are more suitable to capture seasonality.
+
+## 3. Holt-Winters’
 ```{r}
-# Summary 
-summary(cars)
+## Holt-Winters’ method additive $ multi
+wine_data <- window(wine.ts, start=c(1992,1))
+
+# Estimate parameters
+#fc <- holt(wine_data, h=5)
+#autoplot(fc)
+
+model1 <- hw(wine_data,seasonal="additive")
+model2 <- hw(wine_data,seasonal="multiplicative")
+autoplot(wine_data) +
+  autolayer(model1, series="Model 1 (additive)", PI=FALSE) +
+  autolayer(model2, series="Model 2 (multiplicative)",
+            PI=FALSE) +
+  xlab("Year") +
+  ylab("millions of dollars") +
+  guides(colour=guide_legend(title="Forecast"))
+
 ```
 
-## Classification Model 
+## 4. ETS
 ```{r}
-# Models 
-plot(pressure)
+ets(wine.ts, model="ZZZ", alpha= NULL, beta = NULL, gamma= NULL)
+
+model3 <- ets(wine.ts)
+autoplot(model3)+
+  theme(plot.title = element_text(hjust = 0.5,face = "bold"))
+
+model3 %>% forecast(h=ifelse(model3$m>1, 2*model3$m, 10)) %>%
+  autoplot() + xlab("Year") +
+  ylab("millions of dollars") +
+  theme(plot.title = element_text(hjust = 0.5,face = "bold"))
 ```
 
-## Results 
+## 5. Final Model
 ```{r}
 # Results 
+round(accuracy(model1), 2)
+round(accuracy(model2),2)
+
+summary(model1)
+summary(model2)
+
+round(accuracy(model3), 2)
+summary(model3)
 ```
 
-## Conclusion
-```{r}
-# Conclusion 
-```
+## 6. Conclusion
+
+By comparing the training set accuracy, model 2 has relatively a better performance than model 1 except at MPE. Thus, the multiplicative model fits the data best so far. 
+Then, I used the ets() to select a model with the smallest AICc, and selected ETS(M, Ad, M) model. Looking at the summary of each model, model 2 is still better than other models in terms of RMSE. However, the problem of RMSE is that the longer the lag length, the better the RMSE value, meaning it will not get worse by including more explanatory variables. Hence, AIC will be used to evaluate the model fit. And the ETS(M, Ad, M) is the most appropriate one because of its lower AIC criteria. 
 

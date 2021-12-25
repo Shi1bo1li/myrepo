@@ -11,7 +11,7 @@
 
 
 
-<title>About This Website</title>
+<title>Forecasting U.S. Alcoholic Beverages Sales</title>
 
 <script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
@@ -36,6 +36,8 @@
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -317,25 +319,46 @@ div.tocify {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html"></a>
+      <a class="navbar-brand" href="index.html">Shibo Li</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">Home</a>
-</li>
-<li>
-  <a href="about.html">Projects</a>
+  <a href="index.html">
+    <span class="fas fa-home"></span>
+     
+    Home
+  </a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fas fa-tasks"></span>
+     
+    Projects
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Forecastings</li>
+    <li>
+      <a href="about.html">First Project</a>
+    </li>
+    <li>
+      <a href="Project1.html">Second Project</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fas fa-laugh"></span>
+     
     Life
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="reading1.html">Task 1</a>
+      <a href="reading1.html">Drone Shots</a>
     </li>
     <li>
       <a href="reading2.html">Task 2</a>
@@ -345,7 +368,16 @@ div.tocify {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://www.linkedin.com/in/shibo-li/">LinkedIn</a>
+  <a>
+    <span class="fas fa-registered"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="http://ww.linkedin.com/in/shibo-li">
+    <span class="fas fa-link"></span>
+     
+  </a>
 </li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -364,43 +396,250 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">About This Website</h1>
+<h1 class="title toc-ignore"><strong>Forecasting U.S. Alcoholic Beverages Sales</strong></h1>
 
 </div>
 
 
-<div id="welcome-to-my-profile" class="section level2">
-<h2>Welcome to my profile</h2>
-<div id="here-is-the-agenda" class="section level3">
-<h3>1.1 Here is the agenda</h3>
-<pre class="r"><code>#Load in packages </code></pre>
+<div id="agenda" class="section level2">
+<h2>1. Agenda</h2>
+<ul>
+<li>Holt-Winters’
+<ul>
+<li>Additive</li>
+<li>Multiplicative</li>
+</ul></li>
+<li>ETS(M, Ad, M)</li>
+<li>Final Model
+<ul>
+<li>Model Comparison
+<ul>
+<li>Evaluation Metrics</li>
+</ul></li>
+<li>Selection</li>
+<li>Results</li>
+</ul></li>
+</ul>
 </div>
+<div id="preliminary" class="section level2">
+<h2>2. Preliminary</h2>
+<pre class="r"><code>#Load in data 
+Data = read.csv(&quot;Alcohol_Sales_Project.csv&quot;, stringsAsFactors = FALSE)
+
+wine.ts &lt;- ts(Data$S4248SM144NCEN, start = c(1992, 1), frequency = 12) 
+autoplot(wine.ts)+ ggtitle(&quot;U.S. Alcoholic Beverages Sales&quot;)+xlab(&quot;Year&quot;) +
+  ylab(&quot;millions of dollars&quot;)+theme(plot.title = element_text(hjust = 0.5,face = &quot;bold&quot;))</code></pre>
+<p><img src="about_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p>I used alcoholic beverages sales in the U.S. from 1992 to 2019. By plotting the data, we can clearly see that there is seasonality with a frequency of five years. Therefore, I chose to used Holt-Winters’s additive, multiplicative because they are more suitable to capture seasonality.</p>
 </div>
-<div id="exploratory-analysis" class="section level2">
-<h2>Exploratory Analysis</h2>
-<pre class="r"><code># Summary 
-summary(cars)</code></pre>
-<pre><code>##      speed           dist       
-##  Min.   : 4.0   Min.   :  2.00  
-##  1st Qu.:12.0   1st Qu.: 26.00  
-##  Median :15.0   Median : 36.00  
-##  Mean   :15.4   Mean   : 42.98  
-##  3rd Qu.:19.0   3rd Qu.: 56.00  
-##  Max.   :25.0   Max.   :120.00</code></pre>
+<div id="holt-winters" class="section level2">
+<h2>3. Holt-Winters’</h2>
+<pre class="r"><code>## Holt-Winters’ method additive $ multi
+wine_data &lt;- window(wine.ts, start=c(1992,1))
+
+# Estimate parameters
+#fc &lt;- holt(wine_data, h=5)
+#autoplot(fc)
+
+model1 &lt;- hw(wine_data,seasonal=&quot;additive&quot;)
+model2 &lt;- hw(wine_data,seasonal=&quot;multiplicative&quot;)
+autoplot(wine_data) +
+  autolayer(model1, series=&quot;Model 1 (additive)&quot;, PI=FALSE) +
+  autolayer(model2, series=&quot;Model 2 (multiplicative)&quot;,
+            PI=FALSE) +
+  xlab(&quot;Year&quot;) +
+  ylab(&quot;millions of dollars&quot;) +
+  guides(colour=guide_legend(title=&quot;Forecast&quot;))</code></pre>
+<p><img src="about_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 </div>
-<div id="classification-model" class="section level2">
-<h2>Classification Model</h2>
-<pre class="r"><code># Models 
-plot(pressure)</code></pre>
+<div id="ets" class="section level2">
+<h2>4. ETS</h2>
+<pre class="r"><code>ets(wine.ts, model=&quot;ZZZ&quot;, alpha= NULL, beta = NULL, gamma= NULL)</code></pre>
+<pre><code>## ETS(M,Ad,M) 
+## 
+## Call:
+##  ets(y = wine.ts, model = &quot;ZZZ&quot;, alpha = NULL, beta = NULL, gamma = NULL) 
+## 
+##   Smoothing parameters:
+##     alpha = 0.0805 
+##     beta  = 0.0232 
+##     gamma = 1e-04 
+##     phi   = 0.9592 
+## 
+##   Initial states:
+##     l = 4199.083 
+##     b = 3.4466 
+##     s = 1.1642 1.0362 1.0338 0.9829 1.0534 1.0081
+##            1.106 1.0665 0.9754 0.9758 0.8275 0.7702
+## 
+##   sigma:  0.0455
+## 
+##      AIC     AICc      BIC 
+## 5672.314 5674.549 5740.422</code></pre>
+<pre class="r"><code>model3 &lt;- ets(wine.ts)
+autoplot(model3)+
+  theme(plot.title = element_text(hjust = 0.5,face = &quot;bold&quot;))</code></pre>
 <p><img src="about_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre class="r"><code>model3 %&gt;% forecast(h=ifelse(model3$m&gt;1, 2*model3$m, 10)) %&gt;%
+  autoplot() + xlab(&quot;Year&quot;) +
+  ylab(&quot;millions of dollars&quot;) +
+  theme(plot.title = element_text(hjust = 0.5,face = &quot;bold&quot;))</code></pre>
+<p><img src="about_files/figure-html/unnamed-chunk-3-2.png" width="672" /></p>
 </div>
-<div id="results" class="section level2">
-<h2>Results</h2>
-<pre class="r"><code># Results </code></pre>
+<div id="final-model" class="section level2">
+<h2>5. Final Model</h2>
+<pre class="r"><code># Results 
+round(accuracy(model1), 2)</code></pre>
+<pre><code>##                 ME  RMSE    MAE  MPE MAPE MASE  ACF1
+## Training set 34.61 401.4 314.85 0.31 4.22 0.74 -0.22</code></pre>
+<pre class="r"><code>round(accuracy(model2),2)</code></pre>
+<pre><code>##                 ME   RMSE    MAE  MPE MAPE MASE  ACF1
+## Training set 33.52 358.48 284.06 0.36 3.68 0.67 -0.27</code></pre>
+<pre class="r"><code>summary(model1)</code></pre>
+<pre><code>## 
+## Forecast method: Holt-Winters&#39; additive method
+## 
+## Model Information:
+## Holt-Winters&#39; additive method 
+## 
+## Call:
+##  hw(y = wine_data, seasonal = &quot;additive&quot;) 
+## 
+##   Smoothing parameters:
+##     alpha = 0.118 
+##     beta  = 0.0031 
+##     gamma = 0.882 
+## 
+##   Initial states:
+##     l = 4436.4199 
+##     b = 7.9429 
+##     s = 1301.63 263.7306 259.4684 -105.7698 396.2852 -8.0715
+##            896.4301 553.4148 -240.3655 -158.3984 -1327.501 -1830.852
+## 
+##   sigma:  411.6596
+## 
+##      AIC     AICc      BIC 
+## 5810.464 5812.457 5874.789 
+## 
+## Error measures:
+##                    ME     RMSE      MAE      MPE     MAPE      MASE       ACF1
+## Training set 34.60908 401.3986 314.8533 0.310144 4.217047 0.7447447 -0.2190557
+## 
+## Forecasts:
+##          Point Forecast    Lo 80    Hi 80    Lo 95    Hi 95
+## Feb 2019       11266.06 10738.49 11793.62 10459.22 12072.90
+## Mar 2019       13564.38 13032.96 14095.81 12751.65 14377.12
+## Apr 2019       12805.73 12270.27 13341.18 11986.82 13624.63
+## May 2019       14997.07 14457.41 15536.73 14171.74 15822.40
+## Jun 2019       15496.05 14952.01 16040.08 14664.02 16328.07
+## Jul 2019       13443.28 12894.69 13991.87 12604.29 14282.27
+## Aug 2019       15002.48 14449.16 15555.79 14156.25 15848.70
+## Sep 2019       13145.98 12587.76 13704.20 12292.25 13999.70
+## Oct 2019       14580.91 14017.60 15144.21 13719.41 15442.41
+## Nov 2019       14803.41 14234.84 15371.97 13933.87 15672.94
+## Dec 2019       16070.23 15496.23 16644.23 15192.38 16948.08
+## Jan 2020       11236.29 10656.68 11815.89 10349.85 12122.72
+## Feb 2020       11784.35 10987.10 12581.59 10565.07 13003.62
+## Mar 2020       14082.67 13281.04 14884.30 12856.69 15308.66
+## Apr 2020       13324.01 12517.85 14130.18 12091.09 14556.94
+## May 2020       15515.36 14704.50 16326.21 14275.26 16755.45
+## Jun 2020       16014.33 15198.64 16830.03 14766.84 17261.83
+## Jul 2020       13961.57 13140.88 14782.25 12706.44 15216.70
+## Aug 2020       15520.77 14694.94 16346.59 14257.77 16783.76
+## Sep 2020       13664.27 12833.14 14495.39 12393.17 14935.36
+## Oct 2020       15099.20 14262.62 15935.77 13819.77 16378.63
+## Nov 2020       15321.69 14479.52 16163.87 14033.69 16609.69
+## Dec 2020       16588.52 15740.58 17436.45 15291.71 17885.32
+## Jan 2021       11754.58 10900.73 12608.42 10448.73 13060.42</code></pre>
+<pre class="r"><code>summary(model2)</code></pre>
+<pre><code>## 
+## Forecast method: Holt-Winters&#39; multiplicative method
+## 
+## Model Information:
+## Holt-Winters&#39; multiplicative method 
+## 
+## Call:
+##  hw(y = wine_data, seasonal = &quot;multiplicative&quot;) 
+## 
+##   Smoothing parameters:
+##     alpha = 0.0873 
+##     beta  = 0.0038 
+##     gamma = 2e-04 
+## 
+##   Initial states:
+##     l = 4198.6663 
+##     b = 3.6891 
+##     s = 1.1668 1.0386 1.0298 0.9852 1.0571 0.9984
+##            1.1157 1.0674 0.9738 0.9734 0.8301 0.7637
+## 
+##   sigma:  0.0459
+## 
+##      AIC     AICc      BIC 
+## 5677.426 5679.419 5741.751 
+## 
+## Error measures:
+##                    ME     RMSE      MAE       MPE     MAPE      MASE       ACF1
+## Training set 33.52376 358.4776 284.0622 0.3587367 3.684699 0.6719122 -0.2723903
+## 
+## Forecasts:
+##          Point Forecast     Lo 80    Hi 80     Lo 95    Hi 95
+## Feb 2019       11075.18 10424.026 11726.34 10079.326 12071.04
+## Mar 2019       13033.35 12263.910 13802.79 11856.593 14210.11
+## Apr 2019       13084.55 12308.685 13860.41 11897.968 14271.13
+## May 2019       14393.01 13535.567 15250.46 13081.663 15704.37
+## Jun 2019       15096.40 14192.582 16000.22 13714.130 16478.67
+## Jul 2019       13557.68 12741.725 14373.64 12309.784 14805.58
+## Aug 2019       14403.78 13532.104 15275.45 13070.668 15736.89
+## Sep 2019       13470.80 12650.850 14290.76 12216.793 14724.81
+## Oct 2019       14129.58 13264.283 14994.87 12806.225 15452.93
+## Nov 2019       14297.75 13416.578 15178.92 12950.115 15645.38
+## Dec 2019       16117.90 15117.958 17117.84 14588.621 17647.18
+## Jan 2020       10585.97  9924.692 11247.26  9574.630 11597.32
+## Feb 2020       11544.99 10818.616 12271.37 10434.096 12655.89
+## Mar 2020       13584.28 12723.250 14445.31 12267.449 14901.11
+## Apr 2020       13635.70 12764.773 14506.62 12303.733 14967.66
+## May 2020       14997.16 14031.688 15962.63 13520.598 16473.72
+## Jun 2020       15727.86 14707.086 16748.63 14166.721 17289.00
+## Jul 2020       14122.81 13198.519 15047.10 12709.228 15536.39
+## Aug 2020       15002.10 14011.806 15992.39 13487.577 16516.62
+## Sep 2020       14028.44 13094.247 14962.63 12599.716 15457.16
+## Oct 2020       14712.47 13723.882 15701.06 13200.554 16224.39
+## Nov 2020       14885.56 13876.112 15895.00 13341.743 16429.37
+## Dec 2020       16778.28 15629.771 17926.79 15021.788 18534.77
+## Jan 2021       11018.23 10256.771 11779.68  9853.681 12182.77</code></pre>
+<pre class="r"><code>round(accuracy(model3), 2)</code></pre>
+<pre><code>##                 ME   RMSE    MAE MPE MAPE MASE  ACF1
+## Training set 53.46 364.39 285.52 0.5 3.66 0.68 -0.29</code></pre>
+<pre class="r"><code>summary(model3)</code></pre>
+<pre><code>## ETS(M,Ad,M) 
+## 
+## Call:
+##  ets(y = wine.ts) 
+## 
+##   Smoothing parameters:
+##     alpha = 0.0805 
+##     beta  = 0.0232 
+##     gamma = 1e-04 
+##     phi   = 0.9592 
+## 
+##   Initial states:
+##     l = 4199.083 
+##     b = 3.4466 
+##     s = 1.1642 1.0362 1.0338 0.9829 1.0534 1.0081
+##            1.106 1.0665 0.9754 0.9758 0.8275 0.7702
+## 
+##   sigma:  0.0455
+## 
+##      AIC     AICc      BIC 
+## 5672.314 5674.549 5740.422 
+## 
+## Training set error measures:
+##                    ME     RMSE      MAE       MPE     MAPE      MASE       ACF1
+## Training set 53.45892 364.3906 285.5164 0.5004852 3.657119 0.6753521 -0.2918586</code></pre>
 </div>
 <div id="conclusion" class="section level2">
-<h2>Conclusion</h2>
-<pre class="r"><code># Conclusion </code></pre>
+<h2>6. Conclusion</h2>
+<p>By comparing the training set accuracy, model 2 has relatively a better performance than model 1 except at MPE. Thus, the multiplicative model fits the data best so far. Then, I used the ets() to select a model with the smallest AICc, and selected ETS(M, Ad, M) model. Looking at the summary of each model, model 2 is still better than other models in terms of RMSE. However, the problem of RMSE is that the longer the lag length, the better the RMSE value, meaning it will not get worse by including more explanatory variables. Hence, AIC will be used to evaluate the model fit. And the ETS(M, Ad, M) is the most appropriate one because of its lower AIC criteria.</p>
 </div>
 
 
