@@ -1,0 +1,61 @@
+---
+title: "**U.S. Airline Passengers Forecastings**"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+# Prepare needed packages
+packages <- c("psych", "tidyr", "ggplot2",
+                "caret", "dplyr", "car", "fpp",
+                "forecast","ResourceSelection",
+                "ggpubr", "scales", "stringr",
+                "gridExtra", "pROC", "reshape2", 
+                "corrplot","glmnet", "plyr",
+                "knitr", "purrr", "readxl")
+  for (i in 1:length(packages)) {
+    if (!packages[i] %in% rownames(installed.packages())) {
+      install.packages(packages[i])
+    }
+    library(packages[i], character.only = TRUE) # Loads package in
+  }
+# Remove unused objects
+rm(packages)
+rm(i)
+```
+
+```{r}
+air <- read.csv("AirPassengers_project_1.csv")
+```
+
+```{r}
+# define time series
+air.ts <- ts(air$X.Passengers, start=1949, frequency= 12)
+
+plot(air.ts, xlab= "Year", main = "Monthly Total Airline Passengers")
+
+# additive decomposition
+air.ts %>% decompose(type="additive") %>%
+  autoplot() + xlab("Year") +
+  ggtitle("Decomposition of Additive Time Series (Fig.1) ")+
+  theme(plot.title = element_text(hjust = 0.5,face = "bold"))
+```
+
+```{r}
+# multiplicative decomposition
+air.ts %>% decompose(type="multiplicative") %>%
+  autoplot() + xlab("Year") +
+  ggtitle("Decomposition of Multiplicative Time Series (Fig.2)")+
+  theme(plot.title = element_text(hjust = 0.5,face = "bold"))
+```
+
+```{r}
+fcast <- stlf(air.ts, method='naive')
+autoplot(fcast)+theme(plot.title = element_text(hjust = 0.5,face = "bold")) +xlab("Year")+
+  ggtitle("Forecasts from STL + Random Walk (Fig.3)")
+
+```
+
