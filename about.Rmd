@@ -6,8 +6,9 @@ output:
     toc_float: true
     code_folding: hide
 ---
-## Load in packages 
+## Welcome to my profile
 
+### 1.1 Here is the agenda
 ```{r}
 #Load in packages 
 
