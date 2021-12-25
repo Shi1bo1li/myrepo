@@ -1,9 +1,10 @@
 ---
-title: "My Website"
+title: "Shibo Li"
+
 ---
 
-Hello, Website!
+## About me 
 
-For more information about simple R Markdown websites, please read the documentation at https://bookdown.org/yihui/rmarkdown/rmarkdown-site.html.
+Hello! I'm Shibo Li. I am a master's student studying applied economics at Boston College. I am sincerely passionate about utilizing data analysis to uncover insights through statistical analysis and visualizations. Currently, I am interested in applying machine learning concepts to economic, demographic and sports data. 
 
-Please also note that simple R Markdown sites are _not_ based on **blogdown**. They are probably good for websites with only a few Rmd documents. For larger-scale and more sophisticated websites (such as blogs), you may want to use **blogdown** instead: https://github.com/rstudio/blogdown.
+

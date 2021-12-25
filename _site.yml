@@ -1,21 +1,25 @@
 name: "Shibo Li"
+output: 
+  html_document: 
+    theme: yeti
 output_dir: docs
 navbar:
-  title: "My Website"
   left:
     - text: "Home"
       href: index.html
-    - text: "About"
+    - text: "Projects"
       href: about.html
-    - text: "New_page"
+    - text: "Life"
       href: New_page.html
-    - text: "Another Page"
-      href: Page1.html
       menu: 
       - text: "Task 1"
         href: reading1.html
       - text: "Task 2"
         href: reading2.html
+  right:
+    - text: "LinkedIn"
+      href: "https://www.linkedin.com/in/shibo-li/"
+
 
 
 
