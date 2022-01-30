@@ -1,8 +1,4 @@
-# myrepo
-Trying to create a website 
+# Personal Website 
 
-"This is a line from RStudio"
-
-“Line added from GitHub.”
-
-Personal Website with a few projects demonstration 
+*This is a personal website created for the purpose of learning and implementing R markdown website 
+*
