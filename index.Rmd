@@ -2,6 +2,6 @@
 title: "About Myself"
 
 ---
-Hello! I'm Shibo Li. I am a master's student studying applied economics at Boston College. I am sincerely passionate about utilizing data analysis to uncover insights through statistical analysis and visualizations. Currently, I am interested in applying machine learning concepts to economic, demographic and sports data. 
+Hello! I'm Shibo Li. I am a master's student studying applied economics at Boston College. I am sincerely passionate about utilizing data analysis to uncover insights through statistical analysis and visualizations. I enjoy leveraging economic, demographic and sports data in making actionable and practical suggestions to technical and non-technical audiences.
 
 
