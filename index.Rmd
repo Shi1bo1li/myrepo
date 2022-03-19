@@ -44,6 +44,7 @@ library(cronologia)
 ```
 
 ```{r, echo=FALSE}
+library(cronologia)
 create_tml_2(df = batman_data, # the data frame
            smr = "title", # the column that will be used in the summary 
            dsc = "date_time", # the column that will be used in the description
