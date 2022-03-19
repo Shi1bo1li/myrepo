@@ -1,6 +1,7 @@
 ---
 title: "**About Myself**"
 date: "Last Updated: Mar 19, 2022"
+output: html_document
 ---
 
 <style type="text/css">
