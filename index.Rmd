@@ -22,7 +22,7 @@ Hello! This is Shibo. I am a recent graduate from Boston College with a Master o
 
 
 
-```{r setup, include=FALSE}
+```{r include=FALSE}
 batman_data <- data.frame(
 
 
@@ -39,8 +39,6 @@ batman_data <- data.frame(
                 "Aug 2016 - July 2020"
   )
 )
-
-library(cronologia)
 ```
 
 ```{r, echo=FALSE}
@@ -53,3 +51,4 @@ create_tml_2(df = batman_data, # the data frame
            smr_bgcol = "#FFFFFF"
            )
 ```
+
