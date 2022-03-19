@@ -22,7 +22,7 @@ Hello! This is Shibo. I am a recent graduate from Boston College with a Master o
 
 
 
-```{r include=FALSE}
+```{r setup, include=FALSE}
 batman_data <- data.frame(
 
 
@@ -39,7 +39,9 @@ batman_data <- data.frame(
                 "Aug 2016 - July 2020"
   )
 )
+```
 
+```{r}
 library(cronologia)
 create_tml_2(df = batman_data, # the data frame
            smr = "title", # the column that will be used in the summary 
