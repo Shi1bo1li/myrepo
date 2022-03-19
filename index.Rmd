@@ -1,9 +1,10 @@
 ---
 title: "**About Myself**"
 date: "Last Updated: Mar 19, 2022"
-output: html_document
+output:
+  html_document:
+    toc: true
 ---
-
 <style type="text/css">
 
 h1.title {
