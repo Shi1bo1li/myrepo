@@ -60,3 +60,32 @@ autoplot(fcast)+theme(plot.title = element_text(hjust = 0.5,face = "bold")) +xla
 ```
 
 
+```{r include=FALSE}
+batman_data <- data.frame(
+
+
+  date_release = c("Master of Science in Applied Economics with GPA: 3.96/4.0
+                    Graduate Certificate in Data Analytics",
+                   "Bachelor of Science in Economics with GPA: 3.43/4.0
+                    Economics Departmental Honors, Recipient of the Arthur J. Boynton Award and 
+                    Dean’s list in 2019 & 2020"),
+
+  title = c("Boston College",
+                  "University of Kansas"),
+  
+  date_time = c("Aug 2020 - Dec 2021", 
+                "Aug 2016 - July 2020"
+  )
+)
+```
+
+```{r, echo=FALSE}
+library(cronologia)
+create_tml_2(df = batman_data, # the data frame
+           smr = "title", # the column that will be used in the summary 
+           dsc = "date_time", # the column that will be used in the description
+           dsc2 = "date_release", 
+           smr_col = "black", 
+           smr_bgcol = "#FFFFFF"
+           )
+```
