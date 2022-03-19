@@ -12,9 +12,9 @@ navbar:
       icon: fa-tasks
       menu:
       - text: "Forecastings"
-      - text: "First Project"
+      - text: "Beverages Sales"
         href: about.html
-      - text: "Second Project"
+      - text: "Air Passengers"
         href: Project1.html
     - text: "Life"
       icon: fa-laugh
@@ -25,9 +25,10 @@ navbar:
       - text: "Task 2"
         href: reading2.html
   right:
-    - icon: fa-registered
-    - icon: fa-link
-      href: "http://www.linkedin.com/in/shibo-li"
+    - href: "https://github.com/Shi1bo1li"
+      icon: fab fa-github
+    - href: "http://www.linkedin.com/in/shibo-li"
+      icon: fab fa-linkedin
       
 
 
